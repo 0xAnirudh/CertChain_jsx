@@ -54,8 +54,8 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: 0;
-  background-image: linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(0, 229, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.055) 1px, transparent 1px);
   background-size: 48px 48px;
   pointer-events: none;
 }
@@ -86,6 +86,194 @@ body::after {
 ::-webkit-scrollbar-thumb {
   background: var(--border2);
   border-radius: 3px;
+}
+
+/* Light theme overrides */
+body.light {
+  --bg: #ffffff;
+  --bg1: #ffffff;
+  --bg2: #f7fafc;
+  --surface: #ffffff;
+  --surface2: #f6f9fb;
+  --border: #e6eef6;
+  --border2: #e0e8f0;
+
+  --cyan: #2563eb;
+  --cyan-dim: #1e40af;
+  --cyan-glow: rgba(37, 99, 235, 0.08);
+  --green: #059669;
+  --green-dim: #047857;
+  --red: #ef4444;
+  --amber: #f59e0b;
+
+  --text: #0b1220;
+  --text2: #475569;
+  --text3: #94a3b8;
+}
+
+body.light .tabs,
+body.light .auth-card,
+body.light .chain-status,
+body.light .stat-chip,
+body.light .chain-block,
+body.light .delete-modal-card {
+  background: #ffffff;
+  border-color: #dbe5ef;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+body.light .chain-status,
+body.light .stat-chip,
+body.light .chain-block,
+body.light .delete-modal-card,
+body.light .auth-card,
+body.light .tabs {
+  backdrop-filter: blur(10px);
+}
+
+body.light .tab {
+  color: #64748b;
+}
+
+body.light .tab:hover:not(.active) {
+  color: #0f172a;
+}
+
+body.light .tab.active {
+  background: linear-gradient(180deg, #111827, #030712);
+  color: #ffffff;
+  border-color: #111827;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.2);
+}
+
+body.light .chain-status {
+  color: #0f172a;
+}
+
+body.light .status-text,
+body.light .status-blocks,
+body.light .block-time,
+body.light .block-field .f-label,
+body.light .delete-modal-desc,
+body.light .auth-state,
+body.light .s-label {
+  color: #64748b;
+}
+
+body.light .block-field .f-val {
+  color: #0f172a;
+}
+
+body.light .btn-secondary {
+  background: linear-gradient(180deg, #111827, #030712);
+  color: #f8fafc;
+  border-color: #111827;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+}
+
+body.light .btn-secondary:hover {
+  border-color: #0f172a;
+  color: #ffffff;
+}
+
+body.light .btn-ghost {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+body.light .btn-ghost:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #020617;
+}
+
+body.light .auth-toggle-btn {
+  background: #f8fafc !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08);
+}
+
+body.light .auth-toggle-btn:hover {
+  background: #ffffff !important;
+  border-color: #94a3b8 !important;
+  color: #020617 !important;
+}
+
+body.light .delete-modal-input {
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04);
+}
+
+body.light .delete-modal-input::placeholder {
+  color: #94a3b8;
+}
+
+body.light .delete-modal-actions .btn-secondary {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+  box-shadow: none;
+}
+
+body.light .delete-modal-actions .btn-secondary:hover {
+  background: #ffffff;
+  border-color: #94a3b8;
+  color: #020617;
+}
+
+body.light .delete-modal-title,
+body.light .auth-title,
+body.light .s-num,
+body.light .logo-text,
+body.light .section-title,
+body.light .block-index,
+body.light .f-hash {
+  color: #0f172a;
+}
+
+body.light .block-index.genesis-badge {
+  color: #b45309;
+  border-color: #f59e0b;
+}
+
+body.light .chain-block.genesis {
+  border-color: rgba(37, 99, 235, 0.18);
+}
+
+body.light .delete-modal-overlay {
+  background: rgba(248, 250, 252, 0.75);
+}
+
+body.light .status-banner {
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+}
+
+body.light .status-banner:hover {
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.14);
+}
+
+body.light .detail-item {
+  background: #ffffff;
+  border-color: #dbe5ef;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+body.light .detail-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.12);
+}
+
+body.light::before {
+  background-image: linear-gradient(rgba(37,99,235,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37,99,235,0.06) 1px, transparent 1px);
+}
+
+body.light::after {
+  background: radial-gradient(ellipse at center, rgba(37,99,235,0.025) 0%, transparent 70%);
 }
 
 /* ─── Links ───────────────────────────────────────────────────────── */

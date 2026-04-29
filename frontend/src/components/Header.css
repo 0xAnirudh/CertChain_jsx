@@ -48,6 +48,41 @@
   gap: 12px;
 }
 
+.theme-toggle {
+  padding: 8px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  transition: var(--transition);
+}
+
+.theme-toggle-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-toggle:hover {
+  border-color: var(--cyan);
+  color: var(--text);
+}
+
+.theme-toggle[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
+  color: var(--bg);
+  box-shadow: 0 6px 24px var(--cyan-glow);
+}
+
 .chain-status {
   display: flex;
   align-items: center;
