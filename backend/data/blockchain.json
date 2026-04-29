@@ -43,21 +43,5 @@
     "previousHash": "004a60c0de74a9158967f87990ca2f55859816902845a10c28a16633c573c54b",
     "nonce": 67,
     "hash": "0030eb3af2c9bd9cc54afce09215dc8956deeaa0430edb5c59914eaf0f66c465"
-  },
-  {
-    "index": 3,
-    "timestamp": "2026-04-29T20:23:38.833Z",
-    "certificateData": {
-      "certificateId": "3f6be687-c157-4d5f-b11f-349cc7f4b40c",
-      "studentName": "Sohail Alim",
-      "course": "ECE",
-      "issuer": "PG",
-      "date": "2026-04-30",
-      "grade": "First Class",
-      "issuedAt": "2026-04-29T20:23:38.833Z"
-    },
-    "previousHash": "0030eb3af2c9bd9cc54afce09215dc8956deeaa0430edb5c59914eaf0f66c465",
-    "nonce": 30,
-    "hash": "003262545aaf011c764a6f89f3b4a3ee14e03315216da84df428d7171d60f69a"
   }
 ]

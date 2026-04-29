@@ -14,6 +14,13 @@ import './App.css';
 
 const AppContent = () => {
   const { addToast } = useToast();
+  const [isNarrowScreen, setIsNarrowScreen] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    return window.innerWidth < 400;
+  });
   const [activeTab, setActiveTab] = useState('verify');
   const [authCardVisible, setAuthCardVisible] = useState(true);
   const [chainStatus, setChainStatus] = useState(null);
@@ -62,6 +69,31 @@ const AppContent = () => {
       setAuthCardVisible(true);
     }
   }, [isAdmin]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsNarrowScreen(window.innerWidth < 400);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  if (isNarrowScreen) {
+    return (
+      <div className="orientation-lock" role="alert" aria-live="polite">
+        <p className="orientation-lock-kicker">Screen too narrow</p>
+        <div className="orientation-lock-icon" aria-hidden="true">
+          <span className="orientation-lock-phone" />
+          <span className="orientation-lock-arrow" />
+        </div>
+        <h1>Rotate your device to landscape</h1>
+        <p className="orientation-lock-note">Optimised for wider view.</p>
+      </div>
+    );
+  }
 
   const handleTabChange = (tabName) => {
     setActiveTab(tabName);
