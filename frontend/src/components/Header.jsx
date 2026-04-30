@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from './Toast';
 import './Header.css';
+import logoImage from '../../logo_bw.png';
 
 const MoonIcon = () => (
   <svg className="theme-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -52,7 +53,7 @@ export const Header = ({ isAdmin, onChainStatusClick, chainStatus }) => {
   return (
     <header className="header">
       <div className="logo">
-        <div className="logo-icon">🔗</div>
+        <img className="logo-image" src={logoImage} alt="CertChain logo" />
         <div>
           <div className="logo-text">
             Cert<span>Chain</span>
