@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from './Toast';
 import './Header.css';
-import logoImage from '../../logo_bw.png';
+import logoImage from '../../assets/logo_bw.png';
 
 const MoonIcon = () => (
   <svg className="theme-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">

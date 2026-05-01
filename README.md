@@ -1,232 +1,293 @@
+<div align="center">
+
+<img src="frontend/assets/logo_bw.png" alt="CertiChain Logo" width="80" />
+
 # CertiChain
 
-CertiChain is a proof-of-concept blockchain-based certificate issuance and verification system. It includes a Node.js/Express backend that maintains a small custom blockchain and a React + Vite frontend to issue, verify, and explore certificates.
+**Tamper-proof certificate issuance and verification — powered by a custom blockchain.**
 
-## Key Features
+<br/>
 
-- Custom in-memory blockchain with SHA-256 hashing and simple proof-of-work
-- Issue verifiable certificates (UUID + QR code + verification URL)
-- Frontend UI with Issue / Verify / Chain Explorer tabs (React + Vite)
-- REST API for issuing and verifying certificates
+[![Node.js](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Blockchain](https://img.shields.io/badge/Core-Custom%20Blockchain-F7931A?style=flat-square&logo=bitcoin&logoColor=white)](#-blockchain-design)
+[![Status](https://img.shields.io/badge/Status-Experimental-orange?style=flat-square)](#)
 
-## Project Structure
+</div>
+
+---
+
+## ✨ Features
+
+- 🔗 &nbsp;Custom blockchain with SHA-256 hashing and proof-of-work
+- 🎓 &nbsp;Issue verifiable certificates stored as immutable blocks
+- 📱 &nbsp;QR code generation with embedded verification URL
+- 🔍 &nbsp;One-click certificate verification by block hash
+- 🧭 &nbsp;Chain Explorer UI to browse the entire blockchain
+- 🛡️ &nbsp;Tamper detection via chain integrity validation
+- 💾 &nbsp;Optional JSON persistence between server restarts
+
+---
+
+## 🧠 Core Idea
+
+Every certificate is a **block on the chain**. Each block contains the certificate data, a SHA-256 hash of its own contents, and the hash of the block before it — forming an immutable linked sequence. Modifying any certificate breaks the chain hash, making tampering instantly detectable.
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Backend | Node.js, Express |
+| Frontend | React, Vite |
+| Hashing | SHA-256 (Node.js `crypto`) |
+| QR Codes | `qrcode` |
+| IDs | `uuid` v4 |
+| Persistence | JSON file (optional) |
+
+---
+
+## 📁 Project Structure
 
 ```
 CertiChain/
 ├── backend/
-│   ├── blockchain.js        # Block & Blockchain implementation
-│   ├── server.js            # Express app and API routes
+│   ├── blockchain.js          # Block & Blockchain core logic
+│   ├── server.js              # Express app entry point
 │   ├── routes/
-│   │   └── certificates.js  # /api endpoints
-│   ├── data/
-│   │   └── blockchain.json  # persisted chain (optional)
-│   └── package.json
-├── frontend/                # React + Vite app
-│   ├── src/
-│   │   ├── components/      # UI components
-│   │   ├── hooks/           # custom hooks
-│   │   └── lib/             # API client
-│   ├── index.html
-│   └── package.json
-└── README.md
+│   │   └── certificates.js    # API route handlers
+│   └── data/
+│       └── blockchain.json    # Optional chain persistence
+│
+└── frontend/
+	├── src/
+	│   ├── components/        # UI components (Issue, Verify, Explorer)
+	│   ├── hooks/             # Custom React hooks
+	│   └── lib/               # API client
+	└── index.html
 ```
 
-## Prerequisites
+---
 
-- Node.js (v16+ recommended)
+## ⚙️ Setup
+
+### Prerequisites
+
+- Node.js v16+
 - npm
 
-## Installation & Run (Development)
-
-1. Backend
+### Backend
 
 ```bash
 cd backend
 npm install
-npm start       # starts server (default PORT=3000)
+npm start
+# Server runs at http://localhost:3000
 ```
 
-2. Frontend
+### Frontend
 
 ```bash
 cd frontend
 npm install
-npm run dev     # starts Vite dev server (usually http://localhost:5173)
+npm run dev
+# UI runs at http://localhost:5173
 ```
 
-Open the frontend (Vite) URL in your browser. The frontend communicates with the backend API (default http://localhost:3000).
-
-## API (summary)
-
-- `POST /api/issue` — issue a new certificate. Expects certificate data (studentName, course, issuer, date, grade). Returns the created certificate, QR image data, and verify URL.
-- `GET /api/verify/:hash` — verify a certificate by its block hash; returns validity and certificate data.
-- `GET /api/chain` — returns the full blockchain data.
-- `GET /api/chain/validate` — validates chain integrity and returns a boolean result.
-
-Refer to `backend/routes/certificates.js` for current request/response formats.
+> The frontend connects to the backend at `http://localhost:3000` by default.
 
 ---
 
-## REST API Reference
+## 🔌 API Endpoints
 
-### `POST /api/issue`
-Issue a new certificate and add a block to the blockchain.
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/issue` | Issue a new certificate |
+| `GET` | `/api/verify/:hash` | Verify a certificate by block hash |
+| `GET` | `/api/chain` | Fetch full blockchain data |
+| `GET` | `/api/chain/validate` | Validate chain integrity |
 
-**Request body example:**
+<details>
+<summary><strong>POST /api/issue</strong> — Request & Response</summary>
 
+**Request**
 ```json
 {
+  "studentName": "Anirudh Chourey",
+  "course": "Information Technology",
+  "issuer": "UIETH, PUSSGRC",
+  "date": "16-08-2023",
+  "grade": "distinction"
+}
+```
+
+**Response**
+```json
+{
+  "success": true,
+  "certificate": {
+	"certificateId": "uuid-v4",
 	"studentName": "Anirudh Chourey",
-	"course": "Information Technology",
-	"issuer": "UIETH, PUSSGRC",
-	"date": "16-08-2023",
-	"grade": "distinction"
+	"blockHash": "00b72e1a...",
+	"blockIndex": 1,
+	"timestamp": "2023-08-16T10:00:00.000Z"
+  },
+  "qrCode": "data:image/png;base64,...",
+  "verifyUrl": "http://localhost:3000/verify/00b72e1a..."
 }
 ```
+</details>
 
-**Response example:**
+<details>
+<summary><strong>GET /api/verify/:hash</strong> — Response</summary>
 
 ```json
 {
-	"success": true,
-	"certificate": {
-		"certificateId": "uuid-v4",
-		"studentName": "Anirudh Chourey",
-		"blockHash": "sha256hex...",
-		"blockIndex": 1,
-		"timestamp": "ISO-8601"
-	},
-	"qrCode": "data:image/png;base64,...",
-	"verifyUrl": "http://localhost:3000/verify/<hash>"
+  "valid": true,
+  "status": "VERIFIED",
+  "certificate": {
+	"studentName": "Anirudh Chourey",
+	"course": "Information Technology"
+  },
+  "chainIntegrity": "INTACT"
 }
 ```
+</details>
 
-### `GET /api/verify/:hash`
-Verify a certificate by its SHA-256 block hash.
+---
 
-**Response (valid) example:**
+## 🎬 Demo
 
-```json
-{
-	"valid": true,
-	"status": "VERIFIED",
-	"certificate": { "studentName": "...", "course": "..." },
-	"chainIntegrity": "INTACT"
-}
+<div align="center">
+
+![Demo GIF](frontend/assets/CertChain.gif)
+
+*Issuing a certificate, scanning the QR code, and verifying on-chain — in seconds.*
+
+</div>
+
+---
+
+## 🔍 Example Flow
+
 ```
-
-### `GET /api/chain`
-Returns the full blockchain (all blocks + stats).
-
-### `GET /api/chain/validate`
-Validates the entire blockchain integrity.
-
-```json
-{ "valid": true, "stats": { "totalBlocks": 5, "totalCertificates": 4 } }
+1. Admin fills the Issue form (name, course, issuer, grade, date)
+		↓
+2. Backend mines a new block and appends it to the chain
+		↓
+3. A QR code is generated containing the block hash URL
+		↓
+4. Anyone scans the QR → hits GET /api/verify/:hash
+		↓
+5. System recomputes hash, checks chain integrity → returns VERIFIED or INVALID
 ```
 
 ---
 
-## How the Blockchain Works
+## ⛓ Blockchain Design
 
 ```
-┌─────────────────────────────────┐
-│  GENESIS BLOCK (#0)             │
-│  hash: 00a3f9bc...              │
-│  prevHash: "0"                 │
-└────────────────┬────────────────┘
-								 │ prevHash links →
-┌────────────────▼────────────────┐
-│  BLOCK #1  [Certificate]        │
-│  student: Anirudh Chourey       │
-│  hash: 00b72e1a...              │
-│  prevHash: 00a3f9bc...          │
-└────────────────┬────────────────┘
-								 │
-┌────────────────▼────────────────┐
-│  BLOCK #2  [Certificate]        │
-│  student: Piyush Maurya         │
-│  hash: 00c41d88...              │
-│  prevHash: 00b72e1a...          │
-└─────────────────────────────────┘
+┌──────────────────────────┐
+│   GENESIS BLOCK  (#0)    │
+│   hash:    00a3f9bc...   │
+│   prevHash: "0"          │
+└────────────┬─────────────┘
+			 │
+┌────────────▼─────────────┐
+│   BLOCK #1               │
+│   student: Anirudh       │
+│   hash:    00b72e1a...   │
+│   prevHash: 00a3f9bc...  │
+└────────────┬─────────────┘
+			 │
+┌────────────▼─────────────┐
+│   BLOCK #2               │
+│   student: Piyush        │
+│   hash:    00c41d88...   │
+│   prevHash: 00b72e1a...  │
+└──────────────────────────┘
 ```
 
-- Each block's **hash** is computed from: `index + timestamp + certData + previousHash + nonce`
-- If anyone modifies a certificate, the hash changes → the next block's `previousHash` no longer matches → **chain invalid**
-- Proof-of-work (difficulty=2): hashes must start with `00` to be accepted
+- **Hash input:** `index + timestamp + certData + previousHash + nonce`
+- **Proof-of-work:** Hash must begin with `00` (difficulty = 2)
+- **Tamper detection:** Any mutation breaks subsequent `previousHash` links
 
 ---
 
-## Security Design
+## 🔒 Security Features
 
 | Feature | Implementation |
 |---|---|
-| Immutability | SHA-256 hash of all block data |
-| Chain linking | `previousHash` field in every block |
+| Immutability | SHA-256 hash over all block data |
+| Chain linking | `previousHash` in every block |
 | Tamper detection | `validateChain()` recomputes every hash |
 | Proof of work | Mining loop with difficulty prefix |
-| QR verification | URL contains the unique block hash |
+| Public verification | Hash-based URL — no account required |
 
 ---
 
-## Using QR Codes
-
-1. Issue a certificate → a QR code is generated
-2. The QR encodes: `http://your-domain/verify/<sha256-hash>`
-3. Anyone can scan the QR → frontend auto-verifies the certificate
-4. No account needed to verify — fully public
-
----
-
-## Dependencies
+## 📦 Dependencies
 
 | Package | Purpose |
 |---|---|
-| `express` | HTTP server |
-| `cors` | Cross-origin requests |
+| `express` | HTTP server and routing |
+| `cors` | Cross-origin request handling |
 | `qrcode` | QR code generation |
-| `uuid` | Unique certificate IDs |
+| `uuid` | Unique certificate identifiers |
 
 ---
 
-## Production Deployment
+## 🚀 Production Ideas
 
-1. Update `BASE_URL` in `frontend/index.html` to your domain
-2. Optionally add MongoDB (replace in-memory chain with persistent storage)
-3. Add JWT auth for the admin `/issue` endpoint
-4. Deploy backend to Railway, Render, or VPS
-5. Serve frontend via nginx or Vercel
+- [ ] Swap in-memory chain for **MongoDB** persistence
+- [ ] Add **JWT authentication** to protect `/api/issue`
+- [ ] Deploy backend on **Railway** or **Render**
+- [ ] Serve frontend via **Vercel** or **nginx**
+- [ ] Update `BASE_URL` in frontend to your production domain
 
-## Data & Persistence
+---
 
-- The repo includes `backend/data/blockchain.json` which can be used to persist the chain between restarts. By default the blockchain may be kept in memory — check `blockchain.js` and `server.js` for the exact behavior.
+## 💡 Future Improvements
 
-## Configuration
+- [ ] Multi-issuer support with role-based access
+- [ ] Email delivery of certificates with embedded QR
+- [ ] Public certificate registry with search
+- [ ] Docker Compose setup for one-command deployment
+- [ ] Unit and integration test suite (Jest / Supertest)
 
-- `PORT` — server port (default `3000`)
-- Proof-of-work `difficulty` — configured in `blockchain.js`
+---
 
-You can run the backend on a different port:
+## 🤝 Contributing
+
+Contributions are welcome. To get started:
 
 ```bash
-PORT=8080 npm start
+# 1. Fork the repository
+# 2. Create a feature branch
+git checkout -b feat/your-feature
+
+# 3. Commit your changes
+git commit -m "feat: add your feature"
+
+# 4. Push and open a Pull Request
+git push origin feat/your-feature
 ```
 
-## Development Notes
-
-- Frontend is built with React and Vite. See `frontend/src` for components and hooks.
-- Backend is a minimal Express server exposing the API and serving data.
-
-## Next steps / Ideas
-
-- Add persistent storage (MongoDB) to store blocks and certificates
-- Add authentication/authorization for issuing certificates
-- Add CI, tests, and Docker deployment configs
+Please keep PRs focused and include a short description of the change.
 
 ---
 
-If you'd like, I can also:
+## 👨‍💻 Author
 
-- Add a short CONTRIBUTING section
-- Create a usage example that issues a certificate via curl
-- Commit these changes for you
+<div align="center">
+
+Built with intent by **Anirudh Chourey**
+
+[![GitHub](https://img.shields.io/badge/GitHub-@0xAnirudh-181717?style=flat-square&logo=github)](https://github.com/0xAnirudh)
+&nbsp;
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/8055anirudh/)
+
+*If you found this useful, consider giving it a ⭐ — it helps more than you think.*
+
+</div>
